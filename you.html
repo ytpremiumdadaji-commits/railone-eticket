@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RailOne - You (Profile)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    
+    <style>
+        :root { --app-bg: #ffffff; --main-bg: #f4f6f9; --text-dark: #111111; --text-grey: #555555; --text-light: #888888; --nav-blue: #0066ff; --top-bg: #e6f6fa; --wallet-green: #00b33c; --btn-blue: #0066ff; --card-border: #eaeff5; --grid-cyan-bg: #e3f5f9; --grid-cyan-text: #2b9bb4; --grid-green-bg: #eaf7ec; --grid-green-text: #509e63; --grid-pink-bg: #fcf1f7; --grid-blue-bg: #e6f4fb; --grid-blue-text: #3c91c9; --grid-orange-bg: #fdf1e6; --grid-orange-text: #d68b3c; --grid-beige-bg: #f9f5e6; --grid-beige-text: #bda25b; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Roboto', sans-serif; font-weight: 400; margin: 0; padding: 0; background-color: var(--main-bg); display: flex; justify-content: center; min-height: 100vh; }
+        .mobile-screen { width: 100%; max-width: 420px; background-color: var(--app-bg); display: flex; flex-direction: column; position: relative; padding-bottom: 80px; box-shadow: 0 0 20px rgba(0,0,0,0.05); overflow-x: hidden; min-height: 100vh; }
+
+        .top-section { background-color: var(--top-bg); border-bottom-left-radius: 35px; border-bottom-right-radius: 35px; padding: 16px 20px 24px 20px; display: flex; flex-direction: column; align-items: center; position: relative; }
+        .header { width: 100%; display: flex; justify-content: flex-start; margin-bottom: 10px; }
+        .back-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #7cb9e8; background-color: white; display: flex; justify-content: center; align-items: center; color: var(--btn-blue); text-decoration: none; }
+        .avatar { width: 75px; height: 75px; background-color: #5eb1f5; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-bottom: 12px; }
+        .avatar .material-icons-outlined { color: white; font-size: 45px; }
+        .profile-name { font-size: 18px; font-weight: 700; color: var(--text-dark); margin-bottom: 6px; text-transform: capitalize; }
+        .profile-links { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; color: var(--btn-blue); margin-bottom: 25px; }
+        .profile-links a { color: var(--btn-blue); text-decoration: none; display: flex; align-items: center; gap: 4px; }
+        .profile-links .material-icons-outlined { font-size: 16px; }
+        .divider { color: #ccc; }
+
+        .wallet-card { width: 100%; background-color: white; border-radius: 18px; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04); }
+        .wallet-left { display: flex; align-items: center; gap: 12px; }
+        .wallet-icon { color: var(--wallet-green); font-size: 30px; }
+        .w-text-group { display: flex; flex-direction: column; gap: 2px; }
+        .w-title { font-size: 13px; color: var(--text-dark); font-weight: 400; }
+        .w-amount { font-size: 16px; font-weight: 700; color: var(--text-dark); }
+        .wallet-right { display: flex; align-items: center; gap: 16px; }
+        .sync-icon { color: var(--btn-blue); font-size: 22px; cursor: pointer; }
+        .add-btn { background-color: var(--btn-blue); color: white; border: none; border-radius: 20px; padding: 8px 20px; font-size: 14px; font-weight: 500; cursor: pointer; }
+
+        .content { padding: 20px 16px; }
+        .progress-card { background-color: white; border: 1px solid var(--card-border); border-radius: 12px; padding: 16px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+        .pc-title { font-size: 14px; font-weight: 500; color: var(--text-dark); margin-bottom: 12px; }
+        .bar-wrapper { display: flex; align-items: center; gap: 12px; }
+        .bar-bg { flex: 1; height: 6px; background-color: #e0e0e0; border-radius: 4px; overflow: hidden; }
+        .bar-fill { width: 100%; height: 100%; background-color: #43a047; border-radius: 4px; }
+        .pc-percent { font-size: 15px; font-weight: 500; color: var(--text-dark); }
+
+        .passengers-card { background-color: #fff9f0; border-radius: 16px; padding: 16px; margin-bottom: 24px; }
+        .p-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .p-h-left { display: flex; align-items: center; gap: 12px; }
+        .p-h-left .material-icons-outlined { color: #f2a65a; font-size: 26px; }
+        .p-titles .p-title { font-size: 14px; font-weight: 700; color: var(--text-dark); margin-bottom: 2px; }
+        .p-titles .p-sub { font-size: 11px; font-weight: 400; color: var(--text-grey); }
+        .p-h-right { display: flex; align-items: center; gap: 12px; }
+        .p-h-right .sync-icon { color: #f2a65a; font-size: 20px; }
+        .p-add-btn { background-color: #f6b567; color: white; border: none; border-radius: 20px; padding: 6px 16px; font-size: 13px; font-weight: 500; cursor: pointer; }
+        .p-item { display: flex; align-items: center; justify-content: space-between; }
+        .p-item-left { display: flex; align-items: center; gap: 12px; }
+        .p-user-icon { color: #f6b567; font-size: 28px; }
+        .p-info .p-name { font-size: 13px; font-weight: 400; color: var(--text-dark); display: flex; align-items: center; gap: 6px; margin-bottom: 4px; text-transform: capitalize; }
+        .veg-icon { display: inline-flex; justify-content: center; align-items: center; width: 12px; height: 12px; border: 1px solid #388e3c; border-radius: 2px; }
+        .veg-dot { width: 6px; height: 6px; background-color: #388e3c; border-radius: 50%; }
+        .p-info .p-details { font-size: 11px; color: var(--text-light); display: flex; align-items: center; gap: 4px; }
+        .p-info .material-icons-outlined { color: #388e3c; font-size: 14px; }
+        .p-actions { display: flex; gap: 10px; }
+        .p-actions .material-icons-outlined { color: #f6b567; font-size: 20px; cursor: pointer; }
+
+        .grid-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .grid-btn { border-radius: 12px; padding: 16px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 10px; cursor: pointer; }
+        .grid-icon { font-size: 32px; }
+        .grid-text { font-size: 12px; font-weight: 500; color: var(--text-dark); line-height: 1.2; }
+        .bg-cyan { background-color: var(--grid-cyan-bg); } .bg-cyan .grid-icon { color: var(--grid-cyan-text); }
+        .bg-green { background-color: var(--grid-green-bg); } .bg-green .grid-icon { color: var(--grid-green-text); }
+        .bg-pink { background-color: var(--grid-pink-bg); }
+        .bg-blue { background-color: var(--grid-blue-bg); } .bg-blue .grid-icon { color: var(--grid-blue-text); }
+        .bg-orange { background-color: var(--grid-orange-bg); } .bg-orange .grid-icon { color: var(--grid-orange-text); }
+        .bg-beige { background-color: var(--grid-beige-bg); } .bg-beige .grid-icon { color: var(--grid-beige-text); }
+        .custom-toggle { background-color: var(--btn-blue); border-radius: 20px; display: flex; align-items: center; padding: 3px 4px 3px 8px; gap: 8px; }
+        .toggle-text { color: white; font-size: 11px; font-weight: 700; }
+        .toggle-circle { width: 16px; height: 16px; background-color: white; border-radius: 50%; }
+
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; max-width: 420px; background-color: var(--nav-blue); display: flex; justify-content: space-between; padding: 12px 24px 16px 24px; z-index: 100; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: rgba(255, 255, 255, 0.6); font-size: 11px; text-decoration: none; font-weight: 500; }
+        .nav-item.active { color: #ffffff; font-weight: 700; }
+        .nav-item .material-icons-outlined { font-size: 26px; }
+    </style>
+</head>
+<body>
+
+<div class="mobile-screen">
+    <div class="top-section">
+        <div class="header">
+            <a href="index.html" class="back-btn"><span class="material-icons-outlined" style="font-size: 22px;">arrow_back</span></a>
+        </div>
+        <div class="avatar"><span class="material-icons-outlined">person</span></div>
+        <div class="profile-name" id="you-name">Rishi</div>
+        <div class="profile-links">
+            <a href="#"><span class="material-icons-outlined">visibility</span> View Details</a>
+            <span class="divider">|</span>
+            <a href="#"><span class="material-icons-outlined">edit</span> Edit Details</a>
+        </div>
+        <div class="wallet-card">
+            <div class="wallet-left">
+                <span class="material-icons-outlined wallet-icon">account_balance_wallet</span>
+                <div class="w-text-group"><div class="w-title">R-Wallet</div><div class="w-amount">₹ 3.50</div></div>
+            </div>
+            <div class="wallet-right"><span class="material-icons-outlined sync-icon">sync</span><button class="add-btn">Add</button></div>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="progress-card">
+            <div class="pc-title">Profile Complete</div>
+            <div class="bar-wrapper"><div class="bar-bg"><div class="bar-fill"></div></div><div class="pc-percent">100%</div></div>
+        </div>
+
+        <div class="passengers-card">
+            <div class="p-header">
+                <div class="p-h-left"><span class="material-icons-outlined">people</span><div class="p-titles"><div class="p-title">Saved Passengers</div><div class="p-sub">Add/Edit Passenger info</div></div></div>
+                <div class="p-h-right"><span class="material-icons-outlined sync-icon">sync</span><button class="p-add-btn">Add</button></div>
+            </div>
+            <div class="p-item">
+                <div class="p-item-left">
+                    <span class="material-icons-outlined p-user-icon">person_outline</span>
+                    <div class="p-info">
+                        <div class="p-name" id="you-pass-name">Rishi <span class="veg-icon"><span class="veg-dot"></span></span></div>
+                        <div class="p-details" id="you-pass-age">26 Y, M, NC | Veg <span class="material-icons-outlined">check_circle</span></div>
+                    </div>
+                </div>
+                <div class="p-actions"><span class="material-icons-outlined">edit</span><span class="material-icons-outlined">delete_outline</span></div>
+            </div>
+        </div>
+
+        <div class="grid-container">
+            <div class="grid-btn bg-cyan"><span class="material-icons-outlined grid-icon">password</span><div class="grid-text">Change<br>Password</div></div>
+            <div class="grid-btn bg-green"><span class="material-icons-outlined grid-icon">account_box</span><div class="grid-text">My<br>Account</div></div>
+            <div class="grid-btn bg-pink"><div class="custom-toggle"><span class="toggle-text">On</span><div class="toggle-circle"></div></div><div class="grid-text">Biometric</div></div>
+            <div class="grid-btn bg-blue"><span class="material-icons-outlined grid-icon">local_activity</span><div class="grid-text">Transfer<br>Ticket</div></div>
+            <div class="grid-btn bg-orange"><span class="material-icons-outlined grid-icon">receipt_long</span><div class="grid-text">My<br>Transaction</div></div>
+            <div class="grid-btn bg-beige"><span class="material-icons-outlined grid-icon">credit_card_off</span><div class="grid-text">DeLink<br>Aadhar</div></div>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="index.html" class="nav-item"><span class="material-icons-outlined">home</span><span>Home</span></a>
+        <a href="bookings.html" class="nav-item"><span class="material-icons-outlined">confirmation_number</span><span>My Bookings</span></a>
+        <a href="you.html" class="nav-item active"><span class="material-icons-outlined">person_outline</span><span>You</span></a>
+        <a href="#" class="nav-item"><span class="material-icons-outlined">menu</span><span>Menu</span></a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        if(localStorage.getItem('uts_name')) {
+            let n = localStorage.getItem('uts_name');
+            let a = localStorage.getItem('uts_age').replace(' years', ' Y'); // "26 years" -> "26 Y"
+            
+            document.getElementById('you-name').innerText = n;
+            document.getElementById('you-pass-name').innerHTML = n + ' <span class="veg-icon"><span class="veg-dot"></span></span>';
+            document.getElementById('you-pass-age').innerHTML = a + ', M, NC | Veg <span class="material-icons-outlined">check_circle</span>';
+        }
+    });
+</script>
+
+</body>
+</html>
