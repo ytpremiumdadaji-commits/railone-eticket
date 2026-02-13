@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UTS Ticket Final Details</title>
+    <title>UTS Ticket Final Exact QR</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --header-bg: #007bff;
+            --header-bg: #3e64ff;
             --app-bg: #eef0f2;
             --soft-mint: #CDFFCC;
             --progress-color: #CDFFCC; 
@@ -61,6 +61,8 @@
             border: 1px solid rgba(255,255,255,0.4);
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
+            text-decoration: none;
+            color: white;
         }
         .header-text h2 { font-size: 18px; font-weight: 500; margin: 0; }
         .header-text p { font-size: 11px; margin: 2px 0 0 0; opacity: 0.85; }
@@ -136,9 +138,9 @@
         .timer-num { height: 65px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
         .booking-lbl { font-size: 13px; color: #aaa; margin-bottom: 5px; }
-        .booking-date { font-size: 22px; font-weight: 700; color: var(--date-orange); margin-bottom: 5px; }
-        .ref-txt { font-size: 13px; color: #fff; opacity: 0.9; }
-        .non-trans { font-size: 13px; color: #fff; margin-bottom: 8px; margin-top: auto; display: block; }
+        .booking-date { font-size: 28px; font-weight: 700; color: var(--date-orange); margin-bottom: 1px; margin-top: auto; }
+        .ref-txt { font-size: 15px; color: #fff; margin-bottom: 1px; margin-top: auto; opacity: 1; }
+        .non-trans { font-size: 15px; color: #fff; margin-bottom: 5px; margin-top: auto; display: block; }
 
         /* Progress Bar */
         .progress-track { width: 100%; height: 6px; background-color: #bbb; position: relative; z-index: 10; }
@@ -196,7 +198,7 @@
         }
         
         .qr-card {
-            background-color: #e0e0e0; padding: 30px 0; border-radius: 0;
+            background-color: #e0e0e0; padding: 2px 0; border-radius: 0;
             display: flex; justify-content: center; align-items: center;
             border-top: 1px solid #d0d0d0; border-bottom: 1px solid #d0d0d0; width: 100%;
         }
@@ -227,7 +229,7 @@
     
     <div class="header">
         <div class="header-left">
-            <div class="back-circle"><i class="fas fa-arrow-left"></i></div>
+            <a href="bookings.html" class="back-circle"><i class="fas fa-arrow-left"></i></a>
             <div class="header-text">
                 <h2>Booking Details</h2>
                 <p>Mobile: <span id="disp_mobile">9584584988</span></p>
@@ -282,7 +284,7 @@
             <div class="white-area">
                 <div class="row">
                     <div class="val-bold" style="font-weight: 500;" id="disp_tType">Season Ticket</div>
-                    <div class="val-bold" style="font-weight: 700;" id="disp_tNum">X80NEA7004</div>
+                    <div class="val-bold" id="disp_tNum">X80NEA7004</div>
                 </div>
 
                 <div class="route-row">
@@ -315,7 +317,7 @@
                 </div>
 
                 <div class="row" style="margin-bottom: 0;">
-                    <div><div class="lbl">ID Type</div><div class="val">---</div></div>
+                    <div><div class="lbl">ID Type</div><div class="val"></div></div>
                     <div style="text-align: right;"><div class="lbl">ID Number</div><div class="val" id="disp_idNum">ZMT1179324</div></div>
                 </div>
                 
@@ -364,37 +366,36 @@
 </div>
 
 <script>
-    // --- POPULATE DATA FROM URL ---
-    const params = new URLSearchParams(window.location.search);
-    if(params.has('mobile')) {
-        document.getElementById('disp_mobile').innerText = params.get('mobile');
-        document.getElementById('disp_name_head').innerText = params.get('name');
-        document.getElementById('disp_bookDate').innerText = params.get('bookDate');
-        document.getElementById('disp_refId').innerText = params.get('refId');
-        
-        document.getElementById('disp_tType').innerText = params.get('tType');
-        document.getElementById('disp_tNum').innerText = params.get('tNum');
-        
-        document.getElementById('disp_src').innerText = params.get('src');
-        document.getElementById('disp_dst').innerText = params.get('dst');
-        document.getElementById('disp_dist').innerText = params.get('dist');
-        
-        document.getElementById('disp_via').innerText = params.get('via');
-        // Extract time from bookDate for 'Booked on' right side field
-        // Simple logic: uses the exact string from form for now
-        let bookDateFull = params.get('bookDate'); 
-        // Try to format it for the small side text: 05/02/2026 07:51:04
-        // For simplicity, we just duplicate the input or use a hardcoded format if user didn't provide specific format
-        document.getElementById('disp_bookedOn').innerText = bookDateFull + ":04"; 
-
-        document.getElementById('disp_validFrom').innerText = params.get('validFrom');
-        document.getElementById('disp_validTill').innerText = params.get('validTill');
-        document.getElementById('disp_classLine').innerText = params.get('classLine');
-        
-        document.getElementById('disp_name').innerText = params.get('name');
-        document.getElementById('disp_age').innerText = params.get('age');
-        document.getElementById('disp_idNum').innerText = params.get('idNum');
-    }
+    // --- POPULATE DATA FROM FORM (localStorage) ---
+    document.addEventListener("DOMContentLoaded", () => {
+        if(localStorage.getItem('uts_name')) {
+            document.getElementById('disp_mobile').innerText = localStorage.getItem('uts_mobile');
+            document.getElementById('disp_name_head').innerText = localStorage.getItem('uts_name');
+            document.getElementById('disp_name').innerText = localStorage.getItem('uts_name');
+            document.getElementById('disp_age').innerText = localStorage.getItem('uts_age');
+            
+            document.getElementById('disp_src').innerText = localStorage.getItem('uts_src');
+            document.getElementById('disp_dst').innerText = localStorage.getItem('uts_dst');
+            document.getElementById('disp_dist').innerText = localStorage.getItem('uts_dist');
+            document.getElementById('disp_via').innerText = localStorage.getItem('uts_via');
+            
+            document.getElementById('disp_tType').innerText = localStorage.getItem('uts_tType');
+            document.getElementById('disp_tNum').innerText = localStorage.getItem('uts_tNum');
+            document.getElementById('disp_refId').innerText = localStorage.getItem('uts_refId');
+            document.getElementById('disp_idNum').innerText = localStorage.getItem('uts_idNum');
+            
+            document.getElementById('disp_bookDate').innerText = localStorage.getItem('uts_bookDate');
+            document.getElementById('disp_validFrom').innerText = localStorage.getItem('uts_validFrom');
+            document.getElementById('disp_validTill').innerText = localStorage.getItem('uts_validTill');
+            document.getElementById('disp_classLine').innerText = localStorage.getItem('uts_classLine');
+            
+            // Re-formatting for the tiny right-side date text
+            let bookDateFull = localStorage.getItem('uts_bookDate');
+            // Assuming format is "05 Feb 2026, 07:51" -> converting to "05/02/2026 07:51:04" for demo
+            let formattedDate = bookDateFull.replace(' Feb ', '/02/').replace(',', '') + ":04"; 
+            document.getElementById('disp_bookedOn').innerText = formattedDate; 
+        }
+    });
 
     // --- TIMER LOGIC ---
     const totalTime = 300; 
@@ -413,6 +414,10 @@
             clearInterval(timerInterval);
             secCurrent.innerText = "00";
             progressBar.style.width = "100%";
+            
+            // ADDED: Redirect to index.html when timer hits 00:00
+            window.location.href = "index.html";
+            
             return;
         }
 
@@ -448,8 +453,12 @@
 
     let initialMins = Math.floor(secondsLeft / 60);
     let initialSecs = secondsLeft % 60;
-    minElem.innerText = initialMins < 10 ? "0" + initialMins : initialMins;
-    secCurrent.innerText = initialSecs < 10 ? "0" + initialSecs : initialSecs;
+    
+    let mInitStr = initialMins < 10 ? "0" + initialMins : initialMins;
+    let sInitStr = initialSecs < 10 ? "0" + initialSecs : initialSecs;
+
+    minElem.innerText = mInitStr;
+    secCurrent.innerText = sInitStr;
 
     const timerInterval = setInterval(updateTimer, 1000);
 </script>
