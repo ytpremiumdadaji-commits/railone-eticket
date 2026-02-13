@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platform E-Ticket</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <style>
+        :root { --app-bg: #f4f6f9; --white: #ffffff; --text-dark: #151e4d; --text-grey: #888888; --btn-blue: #0066ff; --light-blue-bg: #f0f7ff; --border-color: #e2e8f0; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Roboto', sans-serif; margin: 0; padding: 0; background-color: var(--app-bg); display: flex; justify-content: center; min-height: 100vh; }
+        .mobile-screen { width: 100%; max-width: 420px; background-color: var(--app-bg); display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); min-height: 100vh; }
+
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background-color: var(--app-bg); }
+        .header-spacer { width: 36px; }
+        .header-title { font-size: 18px; font-weight: 700; color: var(--text-dark); letter-spacing: 0.2px; }
+        .close-btn { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid #cce0ff; display: flex; justify-content: center; align-items: center; color: var(--btn-blue); cursor: pointer; text-decoration: none; }
+
+        .card { background-color: var(--white); margin: 0 16px; border-radius: 16px; padding: 20px 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .toggle-box { display: flex; align-items: center; border: 1px solid var(--border-color); border-radius: 30px; margin-bottom: 24px; position: relative; }
+        .t-left { flex: 1; padding: 12px; color: var(--text-grey); font-size: 13px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 6px; border-radius: 30px 0 0 30px; }
+        .t-right { flex: 1; padding: 12px; background-color: var(--btn-blue); color: var(--white); font-size: 13px; font-weight: 500; border-radius: 30px; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: -2px 0 5px rgba(0,0,0,0.08); margin-left: -15px; }
+
+        .input-group { margin-bottom: 24px; }
+        .input-label { font-size: 14px; font-weight: 500; color: #0088cc; margin-bottom: 8px; display: block; }
+        .input-wrapper { display: flex; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; gap: 12px; }
+        .train-icon { color: #b0b0b0; font-size: 24px; }
+        .input-wrapper input { flex: 1; border: none; outline: none; font-size: 15px; font-weight: 500; color: var(--text-dark); }
+        .qr-icon { color: var(--btn-blue); font-size: 24px; cursor: pointer; }
+
+        .counter-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .counter-label { font-size: 15px; font-weight: 600; color: #333; }
+        .counter-controls { display: flex; align-items: center; gap: 12px; }
+        .c-btn { color: var(--btn-blue); font-size: 20px; cursor: pointer; font-weight: bold; user-select: none; }
+        .c-circle { width: 28px; height: 28px; background-color: var(--btn-blue); color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 14px; font-weight: 700; }
+
+        .fare-box { background-color: var(--light-blue-bg); border-radius: 8px; padding: 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .fare-left { display: flex; align-items: center; gap: 12px; }
+        .fare-icon { color: var(--btn-blue); font-size: 24px; }
+        .fare-label { font-size: 15px; font-weight: 700; color: var(--text-dark); }
+        .fare-amount { font-size: 15px; color: #444; font-weight: 500; }
+
+        .pay-btn { width: 100%; background-color: var(--btn-blue); color: white; border: none; border-radius: 30px; padding: 16px; font-size: 16px; font-weight: 500; cursor: pointer; }
+    </style>
+</head>
+<body>
+<div class="mobile-screen">
+    <div class="header">
+        <div class="header-spacer"></div>
+        <div class="header-title">Platform E-Ticket</div>
+        <a href="index.html" class="close-btn"><span class="material-icons-outlined">close</span></a>
+    </div>
+    <div class="card">
+        <div class="toggle-box"><div class="t-left">Outside Station <span class="material-icons-outlined info-icon">info</span></div><div class="t-right">At Station <span class="material-icons-outlined info-icon">info</span></div></div>
+        <div class="input-group">
+            <label class="input-label">Station</label>
+            <div class="input-wrapper">
+                <span class="material-icons-outlined train-icon">train</span>
+                <input type="text" id="stn-input" placeholder="Station" oninput="calculateFare()">
+                <span class="material-icons-outlined qr-icon">qr_code_scanner</span>
+            </div>
+        </div>
+        <div class="counter-row">
+            <div class="counter-label">Number of Person(s)</div>
+            <div class="counter-controls">
+                <span class="material-icons-outlined c-btn" onclick="updateCount(-1)">remove</span>
+                <div class="c-circle" id="person-cnt">1</div>
+                <span class="material-icons-outlined c-btn" onclick="updateCount(1)">add</span>
+            </div>
+        </div>
+        <div class="fare-box">
+            <div class="fare-left"><span class="material-icons-outlined fare-icon">local_activity</span><span class="fare-label">Total Fare</span></div>
+            <div class="fare-amount" id="fare-txt">₹ 0.0</div>
+        </div>
+        <button class="pay-btn" id="pay-btn" onclick="window.location.href='form.html'">Pay ₹ 0.0</button>
+    </div>
+</div>
+
+<script>
+    const stnInput = document.getElementById("stn-input"); const fareTxt = document.getElementById("fare-txt"); const payBtn = document.getElementById("pay-btn"); const countTxt = document.getElementById("person-cnt");
+    let count = 1; const baseFare = 10.0;
+    function calculateFare() {
+        if (stnInput.value.trim().length > 0) { let t = count * baseFare; fareTxt.innerText = `₹ ${t.toFixed(1)}`; payBtn.innerText = `Pay ₹ ${t.toFixed(1)}`; } 
+        else { fareTxt.innerText = `₹ 0.0`; payBtn.innerText = `Pay ₹ 0.0`; }
+    }
+    function updateCount(ch) { let nc = count + ch; if (nc >= 1 && nc <= 10) { count = nc; countTxt.innerText = count; calculateFare(); } }
+</script>
+</body>
+</html>
