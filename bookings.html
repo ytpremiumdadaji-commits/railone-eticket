@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RailOne - My Bookings Exact Fonts</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    
+    <style>
+        :root { --app-bg: #ffffff; --text-dark: #111111; --text-grey: #666666; --text-light-grey: #888888; --nav-blue: #005ce6; --brand-orange: #f57c00; --badge-bg: #f4e8ff; --badge-text: #9c27b0; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Roboto', sans-serif; font-weight: 400; margin: 0; padding: 0; background-color: #f0f2f5; display: flex; justify-content: center; min-height: 100vh; }
+        .mobile-screen { width: 100%; max-width: 420px; background-color: var(--app-bg); display: flex; flex-direction: column; position: relative; padding-bottom: 90px; box-shadow: 0 0 20px rgba(0,0,0,0.05); overflow-x: hidden; min-height: 100vh; }
+
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: var(--nav-blue); color: white; position: sticky; top: 0; z-index: 50; }
+        .header-left { display: flex; align-items: center; gap: 16px; }
+        .back-btn { width: 32px; height: 32px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.7); display: flex; justify-content: center; align-items: center; color: white; text-decoration: none; }
+        .header-title { font-size: 18px; font-weight: 500; letter-spacing: 0.2px; }
+        .filter-icon .material-icons-outlined { font-size: 24px; transform: scaleX(-1); }
+
+        .sub-header { display: flex; justify-content: center; align-items: center; padding: 16px 20px; position: relative; }
+        .sub-header-title { color: var(--brand-orange); font-size: 14px; font-weight: 500; }
+        .refresh-icon { position: absolute; right: 16px; color: #777; font-size: 20px; cursor: pointer; }
+
+        .ticket-wrapper { padding: 0 16px; }
+        .ticket-card { border: 1px solid var(--brand-orange); border-radius: 12px; background-color: #fff; position: relative; display: flex; flex-direction: column; }
+        .card-top { padding: 16px 16px 14px 16px; }
+        .row-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .badge { background-color: var(--badge-bg); color: var(--badge-text); padding: 5px 10px; border-radius: 6px; font-size: 12px; font-weight: 500; letter-spacing: 0.2px; }
+        .uts-text { font-size: 13px; color: var(--text-grey); font-weight: 400; }
+        .uts-text span { color: #000; font-weight: 700; }
+
+        .data-row { display: flex; justify-content: space-between; margin-bottom: 12px; }
+        .col { display: flex; flex-direction: column; gap: 3px; }
+        .col.right { text-align: right; }
+        .lbl { font-size: 12px; color: #aaa; font-weight: 400; }
+        .val { font-size: 14px; color: var(--text-dark); font-weight: 500; text-transform: uppercase; }
+
+        .route-row { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; text-transform: uppercase; }
+        .station { font-size: 14px; font-weight: 500; color: var(--text-dark); }
+        .distance { font-size: 11px; color: #bbb; font-weight: 400; text-transform: lowercase; }
+
+        .divider-wrapper { position: relative; height: 1px; margin: 6px 0; display: flex; align-items: center; }
+        .dotted-line { width: 100%; border-top: 1px dashed #fbd8b4; margin: 0 12px; }
+        .cutout-left, .cutout-right { position: absolute; top: -12px; width: 12px; height: 24px; background-color: var(--app-bg); border: 1px solid var(--brand-orange); z-index: 2; }
+        .cutout-left { left: -1px; border-left: none; border-radius: 0 24px 24px 0; }
+        .cutout-right { right: -1px; border-right: none; border-radius: 24px 0 0 24px; }
+
+        .card-actions { display: flex; align-items: center; padding: 16px 0; }
+        .action-btn { flex: 1; text-align: center; font-size: 15px; font-weight: 500; cursor: pointer; text-decoration: none; background: none; border: none; padding: 5px; font-family: 'Roboto', sans-serif; }
+        .action-btn.grey { color: #888; }
+        .action-btn.blue { color: var(--nav-blue); }
+        .vertical-line { width: 1px; height: 18px; background-color: #e0e0e0; }
+
+        .bottom-tabs-container { position: fixed; bottom: 0; width: 100%; max-width: 420px; background-color: #f6f8fb; border-top-left-radius: 16px; border-top-right-radius: 16px; border: 1px solid #e2e8f0; padding: 12px 8px 20px 8px; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
+        .b-tab { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; color: #a0aab8; font-size: 11px; font-weight: 400; padding: 10px 0; border-radius: 12px; cursor: pointer; text-decoration: none; }
+        .b-tab .material-icons-outlined { font-size: 24px; }
+        .b-tab.active { background-color: #fffaf5; color: var(--brand-orange); border: 1px solid #ffe0b2; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+<div class="mobile-screen">
+    
+    <div class="header">
+        <div class="header-left">
+            <a href="index.html" class="back-btn"><span class="material-icons-outlined" style="font-size: 20px;">arrow_back</span></a>
+            <div class="header-title">My Bookings</div>
+        </div>
+        <div class="filter-icon"><span class="material-icons-outlined">sort</span></div>
+    </div>
+
+    <div class="sub-header">
+        <div class="sub-header-title">Upcoming (1)</div>
+        <div class="refresh-icon"><span class="material-icons-outlined">sync</span></div>
+    </div>
+
+    <div class="ticket-wrapper">
+        <div class="ticket-card">
+            <div class="card-top">
+                <div class="row-header">
+                    <div class="badge">Unreserved</div>
+                    <div class="uts-text">UTS: <span id="bk-tNum">X80NEA7004</span></div>
+                </div>
+
+                <div class="data-row">
+                    <div class="col">
+                        <span class="lbl">Ticket Type</span>
+                        <span class="val" id="bk-tType">MONTHLY</span>
+                    </div>
+                    <div class="col right">
+                        <span class="lbl">Booking Date</span>
+                        <span class="val" id="bk-date" style="text-transform: none;">Thu, 5 Feb 26</span>
+                    </div>
+                </div>
+
+                <div class="route-row">
+                    <div class="station" id="bk-src">SHRIDHAM</div>
+                    <div class="distance" id="bk-dist">— 54 km —</div>
+                    <div class="station" id="bk-dst">JABALPUR</div>
+                </div>
+            </div>
+
+            <div class="divider-wrapper"><div class="cutout-left"></div><div class="dotted-line"></div><div class="cutout-right"></div></div>
+
+            <div class="card-actions">
+                <button class="action-btn grey" onclick="window.location.href='form.html'">Book Again</button>
+                <div class="vertical-line"></div>
+                <button class="action-btn blue" onclick="window.location.href='ticket.html'">View Details</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-tabs-container">
+        <a href="#" class="b-tab active"><span class="material-icons-outlined">local_activity</span><span>Upcoming</span></a>
+        <a href="#" class="b-tab"><span class="material-icons-outlined">confirmation_number</span><span>Completed</span></a>
+        <a href="#" class="b-tab"><span class="material-icons-outlined">subtitles_off</span><span>Cancelled</span></a>
+        <a href="#" class="b-tab"><span class="material-icons-outlined">receipt_long</span><span>All</span></a>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        if(localStorage.getItem('uts_tNum')) {
+            document.getElementById('bk-tNum').innerText = localStorage.getItem('uts_tNum');
+            document.getElementById('bk-src').innerText = localStorage.getItem('uts_src');
+            document.getElementById('bk-dst').innerText = localStorage.getItem('uts_dst');
+            document.getElementById('bk-dist').innerText = "— " + localStorage.getItem('uts_dist') + " —";
+            
+            // Extract type from class line (e.g., MONTHLY | SECOND...)
+            let classL = localStorage.getItem('uts_classLine');
+            if(classL.includes('|')) {
+                document.getElementById('bk-tType').innerText = classL.split('|')[0].trim();
+            }
+            
+            // Reformat Date for Bookings Page (Thu, 5 Feb 26)
+            let rawDate = localStorage.getItem('uts_bookDate').split(',')[0]; // "05 Feb 2026"
+            let shortYear = rawDate.slice(-2); // "26"
+            let dayMonth = rawDate.substring(0, 6); // "05 Feb"
+            if(dayMonth.startsWith("0")) dayMonth = dayMonth.substring(1); // "5 Feb"
+            document.getElementById('bk-date').innerText = "Thu, " + dayMonth + " " + shortYear;
+        }
+    });
+</script>
+
+</body>
+</html>
