@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UTS Ticket Final Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --header-bg: #007bff;
+            --app-bg: #eef0f2;
+            --soft-mint: #CDFFCC;
+            --progress-color: #CDFFCC; 
+            --timer-red: #ff3333;
+            --date-orange: #ff9933;
+            --text-grey: #666;
+            --card-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            --upgrade-blue: #3e64ff;
+            --alert-bg: #CDBCBC; 
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--app-bg);
+            color: #000;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .mobile-screen {
+            width: 100%;
+            max-width: 450px;
+            background-color: var(--app-bg);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        /* --- Header --- */
+        .header {
+            background-color: var(--header-bg);
+            color: white;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .back-circle {
+            width: 32px; height: 32px;
+            border: 1px solid rgba(255,255,255,0.4);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .header-text h2 { font-size: 18px; font-weight: 500; margin: 0; }
+        .header-text p { font-size: 11px; margin: 2px 0 0 0; opacity: 0.85; }
+        .share-icon { font-size: 18px; opacity: 0.9; }
+
+        .greeting {
+            padding: 20px 25px;
+            font-size: 13px;
+            color: #000;
+            background-color: #ffffff;
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 10px;
+        }
+
+        /* --- TICKET CARD --- */
+        .ticket-wrapper {
+            padding: 0 15px;
+            margin-bottom: 15px;
+        }
+
+        .ticket-card {
+            background: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            border: 1px solid #e0e0e0;
+        }
+
+        .mint-bar { height: 15px; background-color: var(--soft-mint); width: 100%; }
+
+        /* Black Area */
+        .black-area {
+            background-color: #050505;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='70' viewBox='0 0 40 70' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23181818' fill-opacity='1' fill-rule='evenodd'%3E%3Cpath d='M20 0L40 35L20 70L0 35z'/%3E%3C/g%3E%3C/svg%3E");
+            background-repeat: repeat;
+            color: white;
+            display: flex;
+            height: 220px;
+            position: relative;
+            flex-direction: column;
+        }
+
+        .black-content { display: flex; width: 100%; flex: 1; }
+        
+        .side-col { width: 45px; position: relative; display: flex; align-items: center; justify-content: center; z-index: 5; }
+        .side-col.left::after, .side-col.right::before {
+            content: ''; position: absolute; top: 5px; bottom: 5px; width: 1.5px;
+            background-image: linear-gradient(to bottom, #ffffff 75%, transparent 75%);
+            background-size: 1.5px 14px; background-repeat: repeat-y; opacity: 0.9;
+        }
+        .side-col.left::after { right: 0; }
+        .side-col.right::before { left: 0; }
+
+        .v-text { white-space: nowrap; color: #999; font-weight: 800; font-size: 20px; letter-spacing: 1px; transform: rotate(-90deg); }
+        .hindi-font { font-size: 25px; font-weight: 700; }
+        
+        .center-col { flex: 1; display: flex; flex-direction: column; align-items: center; padding-top: 8px; text-align: center; z-index: 5; }
+        .preview-text { font-size: 14px; font-weight: 600; color: #eee; margin-bottom: 5px; }
+
+        /* Timer */
+        .timer-val {
+            font-size: 60px; font-weight: 800; color: var(--timer-red); line-height: 1;
+            font-family: sans-serif; margin-bottom: 6px; display: flex; justify-content: center;
+            gap: 2px; height: 65px; overflow: hidden;
+        }
+        .timer-digit-container { height: 65px; overflow: hidden; position: relative; width: 80px; }
+        .digit-slide-box {
+            display: flex; flex-direction: column; transform: translateY(-65px);
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .digit-slide-box.slide-active { transform: translateY(0px); }
+        .timer-num { height: 65px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+        .booking-lbl { font-size: 13px; color: #aaa; margin-bottom: 5px; }
+        .booking-date { font-size: 22px; font-weight: 700; color: var(--date-orange); margin-bottom: 5px; }
+        .ref-txt { font-size: 13px; color: #fff; opacity: 0.9; }
+        .non-trans { font-size: 13px; color: #fff; margin-bottom: 8px; margin-top: auto; display: block; }
+
+        /* Progress Bar */
+        .progress-track { width: 100%; height: 6px; background-color: #bbb; position: relative; z-index: 10; }
+        .progress-fill { height: 100%; background-color: var(--progress-color); width: 0%; transition: width 1s linear; }
+
+        /* White Details */
+        .white-area { 
+            background-color: #fff; 
+            padding: 15px; 
+            position: relative; 
+            min-height: 250px;
+        }
+
+        /* Cuts */
+        .separator-line {
+            position: absolute; top: 226px; left: 20px; right: 20px; height: 0;
+            border-top: 2px dotted #CDFFCC; z-index: 5; opacity: 0.6;
+        }
+        .cut {
+            position: absolute; width: 40px; height: 40px; background-color: var(--app-bg);
+            border-radius: 50%; top: 208px; z-index: 10;
+            box-shadow: inset 1px 1px 3px rgba(0,0,0,0.1); border: 1px solid #e0e0e0;
+        }
+        .cut-l { left: -22px; } .cut-r { right: -22px; }
+
+        .row { display: flex; justify-content: space-between; margin-bottom: 12px; align-items: flex-start; }
+        .lbl { font-size: 15px; color: var(--text-grey); margin-bottom: 3px; }
+        .val { font-size: 15px; font-weight: 600; color: #222; }
+        .val-bold { font-size: 15px; font-weight: 700; color: #000; }
+        .route-row { display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 16px; margin: 15px 0; color: #222; }
+        .km-text { font-size: 13px; font-weight: 400; color: #555; }
+        .type-line { font-size: 14px; font-weight: 600; color: #000; margin: 20px 0; }
+        .mint-bar-btm { height: 15px; background-color: var(--soft-mint); width: 100%; }
+
+        /* Alert Box */
+        .footer-alert {
+            margin: 0 15px 15px 15px; 
+            padding: 10px; 
+            background-color: rgba(205, 188, 188, 0.4);
+            border-radius: 6px; 
+            color: #d32f2f; 
+            font-size: 14px; 
+            text-align: center;
+            line-height: 1.2; 
+            border: 1px solid #CDBCBC;
+        }
+
+        /* Bottom Section */
+        .bottom-section { display: flex; flex-direction: column; gap: 15px; width: 100%; }
+        .upgrade-btn-wrapper { padding: 0 15px; margin-bottom: 5px; }
+        .upgrade-btn {
+            background-color: var(--upgrade-blue); color: white; width: 100%; padding: 14px;
+            border: none; border-radius: 50px; font-size: 16px; font-weight: 600;
+            box-shadow: 0 4px 6px rgba(62, 100, 255, 0.2); display: block;
+        }
+        
+        .qr-card {
+            background-color: #e0e0e0; padding: 30px 0; border-radius: 0;
+            display: flex; justify-content: center; align-items: center;
+            border-top: 1px solid #d0d0d0; border-bottom: 1px solid #d0d0d0; width: 100%;
+        }
+        
+        .qr-img {
+            width: 180px; height: 180px;
+            background-image: url('https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=UTSTicketSecureDataStringForVisualSimulationOfComplexPatternVeryLongDataIsRequiredToMakeTheModuleDensityHighLikeTheOriginalImageProvidedByUserMatchesVisualComplexity&ecc=M');
+            background-size: cover; 
+            image-rendering: pixelated;
+        }
+
+        .info-card {
+            background-color: #ffffff; 
+            padding: 20px 20px; 
+            border-radius: 0;
+            border-bottom: 1px solid #e0e0e0; 
+            width: 100%;
+        }
+        .info-block { text-align: left; color: #333; }
+        .info-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: #222; }
+        .info-text { font-size: 15px; color: #666; margin-bottom: 12px; line-height: 1.4; }
+
+    </style>
+</head>
+<body>
+
+<div class="mobile-screen">
+    
+    <div class="header">
+        <div class="header-left">
+            <div class="back-circle"><i class="fas fa-arrow-left"></i></div>
+            <div class="header-text">
+                <h2>Booking Details</h2>
+                <p>Mobile: <span id="disp_mobile">9584584988</span></p>
+            </div>
+        </div>
+        <i class="fas fa-share-alt share-icon"></i>
+    </div>
+
+    <div class="greeting">Thank You <span id="disp_name_head">Rishi</span>, Happy Journey !</div>
+
+    <div class="ticket-wrapper">
+        <div class="ticket-card">
+            <div class="mint-bar"></div>
+
+            <div class="black-area">
+                <div class="black-content">
+                    <div class="side-col left">
+                        <div class="v-text">INDIAN RAILWAYS</div>
+                    </div>
+
+                    <div class="center-col">
+                        <div class="preview-text">Dynamic preview will close in</div>
+                        
+                        <div class="timer-val">
+                            <div class="timer-digit" id="min">05</div>
+                            <div>:</div>
+                            <div class="timer-digit-container">
+                                <div class="digit-slide-box" id="secSlider">
+                                    <div class="timer-num" id="secNext">59</div>
+                                    <div class="timer-num" id="secCurrent">00</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="booking-lbl">Ticket Booking Date & Time</div>
+                        <div class="booking-date" id="disp_bookDate">05 Feb 2026, 07:51</div>
+                        <div class="ref-txt" id="disp_refId">R19884</div>
+                        
+                        <span class="non-trans">Ticket is Non-Transferable</span>
+                    </div>
+
+                    <div class="side-col right">
+                        <div class="v-text hindi-font">भारतीय रेल</div>
+                    </div>
+                </div>
+
+                <div class="progress-track">
+                    <div class="progress-fill" id="progressBar"></div>
+                </div>
+            </div>
+
+            <div class="white-area">
+                <div class="row">
+                    <div class="val-bold" style="font-weight: 500;" id="disp_tType">Season Ticket</div>
+                    <div class="val-bold" style="font-weight: 700;" id="disp_tNum">X80NEA7004</div>
+                </div>
+
+                <div class="route-row">
+                    <div id="disp_src">SHRIDHAM</div>
+                    <div class="km-text">— <span id="disp_dist">54 km</span> —</div>
+                    <div id="disp_dst">JABALPUR</div>
+                </div>
+
+                <div class="row">
+                    <div><div class="lbl">Via</div><div class="val" id="disp_via">------</div></div>
+                    <div style="text-align: right;"><div class="lbl">Booked on</div><div class="val" style="font-size: 13px;" id="disp_bookedOn">05/02/2026 07:51:04</div></div>
+                </div>
+
+                <div class="row">
+                    <div><div class="lbl">Valid From</div><div class="val-bold" id="disp_validFrom">06/02/2026</div></div>
+                    <div style="text-align: right;"><div class="lbl">*Valid Till</div><div class="val-bold" id="disp_validTill">05/03/2026</div></div>
+                </div>
+
+                <div class="type-line" id="disp_classLine">MONTHLY | SECOND | ₹ 270.00</div>
+                
+                <div class="cut cut-l"></div>
+                <div class="separator-line"></div>
+                <div class="cut cut-r"></div>
+
+                <div style="height: 35px;"></div> 
+
+                <div class="row">
+                    <div><div class="lbl">Name</div><div class="val" id="disp_name">Rishi</div></div>
+                    <div style="text-align: right;"><div class="lbl">Age</div><div class="val" id="disp_age">26 years</div></div>
+                </div>
+
+                <div class="row" style="margin-bottom: 0;">
+                    <div><div class="lbl">ID Type</div><div class="val">---</div></div>
+                    <div style="text-align: right;"><div class="lbl">ID Number</div><div class="val" id="disp_idNum">ZMT1179324</div></div>
+                </div>
+                
+                <div class="row" style="margin-top: 10px;">
+                    <div><div class="lbl">Concession Type</div></div>
+                    <div style="text-align: right;"><div class="lbl">Concession ID</div></div>
+                </div>
+            </div>
+
+            <div class="mint-bar-btm"></div>
+        </div>
+    </div>
+
+    <div class="footer-alert">
+        Note: This ticket is non refundable. Ticket is stored locally on the device. Please do not change your handset or perform factory reset.
+    </div>
+
+    <div class="bottom-section">
+        <div class="upgrade-btn-wrapper">
+            <button class="upgrade-btn">Upgrade to Superfast</button>
+        </div>
+
+        <div class="qr-card">
+            <div class="qr-img"></div>
+        </div>
+
+        <div class="info-card">
+            <div class="info-block">
+                <div class="info-title">Do you know?</div>
+                
+                <div class="info-text">
+                    IR recovers only 57% of cost of travel on an average.
+                </div>
+                
+                <div class="info-text">
+                    This ticket is booked on a personal user ID. It's sale/purchase is an offence u/s 143 of the Railways Act, 1989
+                </div>
+
+                <div class="info-text">
+                    For enquiry and integrated railway helpline please dial 139.
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // --- POPULATE DATA FROM URL ---
+    const params = new URLSearchParams(window.location.search);
+    if(params.has('mobile')) {
+        document.getElementById('disp_mobile').innerText = params.get('mobile');
+        document.getElementById('disp_name_head').innerText = params.get('name');
+        document.getElementById('disp_bookDate').innerText = params.get('bookDate');
+        document.getElementById('disp_refId').innerText = params.get('refId');
+        
+        document.getElementById('disp_tType').innerText = params.get('tType');
+        document.getElementById('disp_tNum').innerText = params.get('tNum');
+        
+        document.getElementById('disp_src').innerText = params.get('src');
+        document.getElementById('disp_dst').innerText = params.get('dst');
+        document.getElementById('disp_dist').innerText = params.get('dist');
+        
+        document.getElementById('disp_via').innerText = params.get('via');
+        // Extract time from bookDate for 'Booked on' right side field
+        // Simple logic: uses the exact string from form for now
+        let bookDateFull = params.get('bookDate'); 
+        // Try to format it for the small side text: 05/02/2026 07:51:04
+        // For simplicity, we just duplicate the input or use a hardcoded format if user didn't provide specific format
+        document.getElementById('disp_bookedOn').innerText = bookDateFull + ":04"; 
+
+        document.getElementById('disp_validFrom').innerText = params.get('validFrom');
+        document.getElementById('disp_validTill').innerText = params.get('validTill');
+        document.getElementById('disp_classLine').innerText = params.get('classLine');
+        
+        document.getElementById('disp_name').innerText = params.get('name');
+        document.getElementById('disp_age').innerText = params.get('age');
+        document.getElementById('disp_idNum').innerText = params.get('idNum');
+    }
+
+    // --- TIMER LOGIC ---
+    const totalTime = 300; 
+    let secondsLeft = totalTime;
+    
+    const minElem = document.getElementById('min');
+    const secSlider = document.getElementById('secSlider');
+    const secNext = document.getElementById('secNext');     
+    const secCurrent = document.getElementById('secCurrent'); 
+    const progressBar = document.getElementById('progressBar');
+
+    let isAnimating = false;
+
+    function updateTimer() {
+        if (secondsLeft <= 0) {
+            clearInterval(timerInterval);
+            secCurrent.innerText = "00";
+            progressBar.style.width = "100%";
+            return;
+        }
+
+        secondsLeft--; 
+
+        let mins = Math.floor(secondsLeft / 60);
+        let secs = secondsLeft % 60;
+        
+        let mStr = mins < 10 ? "0" + mins : mins;
+        let sStr = secs < 10 ? "0" + secs : secs;
+
+        minElem.innerText = mStr;
+
+        if (!isAnimating) {
+            isAnimating = true;
+            secNext.innerText = sStr;
+            secSlider.classList.add('slide-active');
+
+            setTimeout(() => {
+                secSlider.style.transition = 'none';
+                secSlider.classList.remove('slide-active');
+                secCurrent.innerText = sStr; 
+                void secSlider.offsetWidth;
+                secSlider.style.transition = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
+                isAnimating = false;
+            }, 600);
+        }
+
+        let timeElapsed = totalTime - secondsLeft;
+        let percentage = (timeElapsed / totalTime) * 100;
+        progressBar.style.width = percentage + "%";
+    }
+
+    let initialMins = Math.floor(secondsLeft / 60);
+    let initialSecs = secondsLeft % 60;
+    minElem.innerText = initialMins < 10 ? "0" + initialMins : initialMins;
+    secCurrent.innerText = initialSecs < 10 ? "0" + initialSecs : initialSecs;
+
+    const timerInterval = setInterval(updateTimer, 1000);
+</script>
+
+</body>
+</html>
