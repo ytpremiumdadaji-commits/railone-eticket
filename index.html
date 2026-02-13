@@ -9,7 +9,7 @@
     
     <style>
         :root {
-            var(--app-bg): #ffffff;
+            --app-bg): #ffffff;
             --text-dark: #1e293b;
             --text-navy: #151e4d;
             --nav-blue: #005ce6; 
@@ -38,14 +38,28 @@
         .greeting { font-size: 12px; font-weight: 700; color: var(--text-navy); margin: 12px 0 20px 0; letter-spacing: 0.3px; text-transform: capitalize; }
         .section-title { font-size: 16px; font-weight: 700; color: var(--text-navy); margin: 0 0 12px 0; }
 
-        /* Journey Planner */
+        /* Journey Planner Updated with Images */
         .planner-grid { display: flex; gap: 12px; margin-bottom: 24px; }
-        .planner-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; }
-        .planner-img { width: 100%; aspect-ratio: 1 / 0.85; border-radius: 14px; background-size: cover; background-position: center; }
-        .img-res { background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); }
-        .img-unres { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); }
-        .img-plat { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); }
-        .planner-lbl { font-size: 12px; color: #475569; font-weight: 500; }
+        .planner-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; }
+        
+        .planner-img { 
+            width: 100%; 
+            aspect-ratio: 1 / 0.85; 
+            border-radius: 14px; 
+            background-size: cover; 
+            background-position: center;
+            background-repeat: no-repeat;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Halka shadow for depth */
+            transition: transform 0.2s;
+        }
+        .planner-item:active .planner-img { transform: scale(0.95); }
+
+        /* Custom Background Images */
+        .img-res { background-image: url('https://www.dropbox.com/scl/fi/74usff9w1jsarm2lr5h4d/Reserved.png?rlkey=rpu4a7thq6blseiq10sl4jb1k&st=x9u10g9o&dl=1'); }
+        .img-unres { background-image: url('https://www.dropbox.com/scl/fi/9kuliw3im2tqeynud93xk/Unreserved.png?rlkey=dbs0p53jqjcs5li7jeixqufdt&st=4gy9qssj&dl=1'); }
+        .img-plat { background-image: url('https://www.dropbox.com/scl/fi/rltii5y82q3t9ovcm6xcv/Platform.png?rlkey=898h7l1nurw7tqw424rmp9kxg&st=ncbn0ifz&dl=1'); }
+
+        .planner-lbl { font-size: 12px; color: var(--text-navy); font-weight: 600; }
 
         /* More Offerings */
         .offer-grid { display: grid; grid-template-columns: repeat(4, 1fr); row-gap: 20px; column-gap: 8px; margin-bottom: 30px; }
@@ -152,7 +166,6 @@
 </div>
 
 <script>
-    // Fetch Data from Form
     document.addEventListener("DOMContentLoaded", () => {
         if(localStorage.getItem('uts_name')) {
             document.getElementById('home-greeting').innerText = "Hi, " + localStorage.getItem('uts_name') + "!";
@@ -160,9 +173,11 @@
         if(localStorage.getItem('uts_src')) {
             document.getElementById('home-uj-src').innerText = localStorage.getItem('uts_src');
             document.getElementById('home-uj-dst').innerText = localStorage.getItem('uts_dst');
-            // Assuming bookDate format is "05 Feb 2026, 07:51"
-            let dateOnly = localStorage.getItem('uts_bookDate').split(',')[0];
-            document.getElementById('home-uj-date').innerText = "Thu, " + dateOnly;
+            let dateVal = localStorage.getItem('uts_bookDate');
+            if(dateVal) {
+                let dateOnly = dateVal.split(',')[0];
+                document.getElementById('home-uj-date').innerText = dateOnly;
+            }
         }
     });
 </script>
